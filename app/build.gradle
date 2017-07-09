@@ -16,7 +16,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        buildTypes.each {
+            it.buildConfigField 'String', 'THE_MOVIE_DB_API_KEY', getApiKey()
+        }
     }
+}
+
+static def getApiKey() {
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('api.properties')))
+    return props['THE_MOVIE_DB_API_KEY']
 }
 
 dependencies {
