@@ -1,7 +1,10 @@
-package me.kevincampos.popularmovies;
+package me.kevincampos.popularmovies.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import me.kevincampos.popularmovies.R;
+import me.kevincampos.popularmovies.data.api.FetchMoviesTask;
 
 public class MainActivity extends AppCompatActivity {
 

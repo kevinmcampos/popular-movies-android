@@ -1,4 +1,4 @@
-package me.kevincampos.popularmovies.network;
+package me.kevincampos.popularmovies.data.api;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

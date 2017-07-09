@@ -1,15 +1,16 @@
-package me.kevincampos.popularmovies;
+package me.kevincampos.popularmovies.data.api;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import me.kevincampos.popularmovies.network.HTTPClient;
-import me.kevincampos.popularmovies.network.HTTPResponse;
+import me.kevincampos.popularmovies.BuildConfig;
+import me.kevincampos.popularmovies.data.Movie;
 
 public class FetchMoviesTask extends AsyncTask {
 
@@ -42,7 +43,13 @@ public class FetchMoviesTask extends AsyncTask {
             HTTPResponse httpResponse = new HTTPClient().execute(context, "GET", FETCH_MOVIES_URL.toString());
             JSONObject responseAsJSON = httpResponse.getResponseAsJSON();
 
-            Log.e(TAG, responseAsJSON.toString(4));
+            JSONArray moviesJSON = responseAsJSON.getJSONArray("results");
+            for (int i = 0; i < moviesJSON.length(); i++) {
+                JSONObject movieJSON = moviesJSON.getJSONObject(i);
+                Movie movie = Movie.fromJSON(movieJSON);
+                Log.e(TAG, "Found " + movie.toString());
+            }
+
         } catch (HTTPClient.NotConnectedException | HTTPClient.InternalErrorException | JSONException e) {
             e.printStackTrace();
         }
