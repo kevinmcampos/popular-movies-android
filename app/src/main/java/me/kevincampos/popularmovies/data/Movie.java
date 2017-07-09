@@ -11,22 +11,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Movie {
 
     private static final String TAG = "Movie";
 
-    final Long ID;
-    final String TITLE;
-    final Double POPULARITY;
-    final Double VOTE_AVERAGE;
-    final String OVERVIEW;
-    final Date RELEASE_DATE;
-    final String POSTER_PATH;
-    final String BACKDROP_PATH;
-    final ArrayList<Long> GENRES;
-    final Boolean IS_ADULT;
+    private final Long ID;
+    public final String TITLE;
+    private final Double POPULARITY;
+    private final Double VOTE_AVERAGE;
+    private final String OVERVIEW;
+    private final Date RELEASE_DATE;
+    private final String POSTER_PATH;
+    private final String BACKDROP_PATH;
+    private final List<Long> GENRES;
+    private final Boolean IS_ADULT;
 
     public Movie(JSONObject movieJSON) throws JSONException {
         ID = movieJSON.getLong("id");

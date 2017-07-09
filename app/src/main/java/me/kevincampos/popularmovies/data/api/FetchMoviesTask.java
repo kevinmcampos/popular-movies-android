@@ -3,27 +3,40 @@ package me.kevincampos.popularmovies.data.api;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.kevincampos.popularmovies.BuildConfig;
 import me.kevincampos.popularmovies.data.Movie;
 
-public class FetchMoviesTask extends AsyncTask {
+public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
 
     private static final String TAG = "FetchMoviesTask";
 
-    private Context context;
+    public interface FetchMoviesCallback {
+        void onSuccess(List<Movie> movies);
+        void onFailed();
+    }
 
-    public FetchMoviesTask(Context context) {
+    private Context context;
+    private int pageIndex;
+    private FetchMoviesCallback callback;
+    private List<Movie> movies;
+
+    public FetchMoviesTask(Context context, int pageIndex, FetchMoviesCallback callback) {
         this.context = context;
+        this.pageIndex = pageIndex;
+        this.callback = callback;
+        this.movies = new ArrayList<>();
     }
 
     @Override
-    protected Object doInBackground(Object[] params) {
+    protected Void doInBackground(Void[] params) {
         fetchMovies();
         return null;
     }
@@ -36,6 +49,7 @@ public class FetchMoviesTask extends AsyncTask {
                 .appendPath("discover")
                 .appendPath("movie")
                 .appendQueryParameter("sort_by", "popularity.desc")
+                .appendQueryParameter("page", String.valueOf(pageIndex))
                 .appendQueryParameter("api_key", BuildConfig.THE_MOVIE_DB_API_KEY)
                 .build();
 
@@ -47,11 +61,16 @@ public class FetchMoviesTask extends AsyncTask {
             for (int i = 0; i < moviesJSON.length(); i++) {
                 JSONObject movieJSON = moviesJSON.getJSONObject(i);
                 Movie movie = Movie.fromJSON(movieJSON);
-                Log.e(TAG, "Found " + movie.toString());
+                movies.add(movie);
             }
 
         } catch (HTTPClient.NotConnectedException | HTTPClient.InternalErrorException | JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPostExecute(Void o) {
+        callback.onSuccess(movies);
     }
 }
