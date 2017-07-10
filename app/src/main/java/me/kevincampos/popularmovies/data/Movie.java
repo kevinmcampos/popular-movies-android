@@ -1,5 +1,6 @@
 package me.kevincampos.popularmovies.data;
 
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -67,6 +68,19 @@ public class Movie {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Uri getPosterURL() {
+        Log.e(TAG, POSTER_PATH);
+
+        return new Uri.Builder()
+                .scheme("http")
+                .path("image.tmdb.org")
+                .appendPath("t")
+                .appendPath("p")
+                .appendPath("w185")
+                .appendPath(POSTER_PATH.substring(1))
+                .build();
     }
 
     /**

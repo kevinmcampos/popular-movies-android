@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -13,10 +15,10 @@ import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.data.Movie;
 import me.kevincampos.popularmovies.data.api.MoviesDataManager;
 
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     @BindView(R.id.movies_grid)
-    private RecyclerView moviesGrid;
+    RecyclerView moviesGrid;
 
     private MoviesDataManager moviesDataManager;
     private MovieAdapter adapter;
@@ -24,8 +26,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
+        fixStatusBarPadding();
 
         moviesDataManager = new MoviesDataManager(getBaseContext(), new MoviesDataManager.DataLoadedCallback() {
             @Override
@@ -48,5 +52,17 @@ public class MainActivity extends AppCompatActivity {
         moviesGrid.setHasFixedSize(true);
 
         moviesDataManager.loadPage();
+    }
+
+    private void fixStatusBarPadding() {
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            int statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+
+            View separator = findViewById(R.id.status_bar_padding);
+            LinearLayout.LayoutParams separatorLayoutParams = (LinearLayout.LayoutParams) separator.getLayoutParams();
+            separatorLayoutParams.height = statusBarHeight;
+            separator.setLayoutParams(separatorLayoutParams);
+        }
     }
 }

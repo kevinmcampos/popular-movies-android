@@ -5,7 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Activity hostActivity;
     private List<Movie> movies = new ArrayList<>();
 
-    public MovieAdapter(MainActivity hostActivity, MoviesDataManager moviesDataManager) {
+    public MovieAdapter(Activity hostActivity, MoviesDataManager moviesDataManager) {
         this.hostActivity = hostActivity;
         moviesDataManager.registerCallback(this);
     }
@@ -61,10 +63,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    private class MovieHolder extends RecyclerView.ViewHolder {
+    class MovieHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.movie_title)
-        TextView title;
+        @BindView(R.id.movie_poster)
+        ImageView poster;
 
         MovieHolder(View itemView) {
             super(itemView);
@@ -72,7 +74,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         void bind(Movie movie) {
-            title.setText(movie.TITLE);
+            Picasso.with(hostActivity.getBaseContext())
+                    .load(movie.getPosterURL())
+                    .into(poster);
+            poster.setContentDescription(hostActivity.getString(R.string.movie_poster_content_description, movie.TITLE));
         }
     }
 }
