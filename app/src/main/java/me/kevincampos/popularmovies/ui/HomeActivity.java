@@ -1,11 +1,14 @@
 package me.kevincampos.popularmovies.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.util.List;
 
@@ -16,6 +19,9 @@ import me.kevincampos.popularmovies.data.Movie;
 import me.kevincampos.popularmovies.data.api.MoviesDataManager;
 
 public class HomeActivity extends AppCompatActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @BindView(R.id.movies_grid)
     RecyclerView moviesGrid;
@@ -28,6 +34,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
+        setActionBar(toolbar);
+        TextView toolbarText = (TextView) toolbar.getChildAt(0);
+        toolbarText.setTextColor(Color.BLACK);
+        toolbarText.setFontFeatureSettings("smcp");
 
         fixStatusBarPadding();
 

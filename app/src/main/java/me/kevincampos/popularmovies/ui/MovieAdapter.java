@@ -76,6 +76,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         void bind(Movie movie) {
             Picasso.with(hostActivity.getBaseContext())
                     .load(movie.getPosterURL())
+                    .placeholder(R.color.immersive_bars)
                     .into(poster);
             poster.setContentDescription(hostActivity.getString(R.string.movie_poster_content_description, movie.TITLE));
         }

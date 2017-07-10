@@ -30,7 +30,7 @@ import me.kevincampos.popularmovies.data.api.MoviesDataManager;
 public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListener {
 
     // The minimum number of items remaining before we should loading more.
-    private static final int VISIBLE_THRESHOLD = 5;
+    private static final int VISIBLE_THRESHOLD = 7;
 
     private final LinearLayoutManager layoutManager;
     private final MoviesDataManager dataLoading;

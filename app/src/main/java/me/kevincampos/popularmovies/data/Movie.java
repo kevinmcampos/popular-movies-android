@@ -71,15 +71,13 @@ public class Movie {
     }
 
     public Uri getPosterURL() {
-        Log.e(TAG, POSTER_PATH);
-
         return new Uri.Builder()
                 .scheme("http")
                 .path("image.tmdb.org")
                 .appendPath("t")
                 .appendPath("p")
                 .appendPath("w185")
-                .appendPath(POSTER_PATH.substring(1))
+                .appendPath(POSTER_PATH.substring(1)) // Remove backslash from path
                 .build();
     }
 
