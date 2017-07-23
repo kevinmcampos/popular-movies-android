@@ -51,6 +51,11 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataLoaded(List<Movie> movies) {
                 adapter.addData(movies);
             }
+
+            @Override
+            public void onDataChange() {
+                adapter.clear();
+            }
         });
 
         adapter = new MovieAdapter(this, moviesDataManager);
@@ -85,6 +90,13 @@ public class HomeActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        moviesDataManager.checkIfSettingsHasChanged();
+
     }
 
     private void fixStatusBarPadding() {

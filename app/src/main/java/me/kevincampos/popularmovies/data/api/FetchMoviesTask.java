@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.kevincampos.popularmovies.BuildConfig;
+import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.data.Movie;
 
 public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
@@ -24,12 +25,14 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
     }
 
     private Context context;
+    private String sortOrder;
     private int pageIndex;
     private FetchMoviesCallback callback;
     private List<Movie> movies;
 
-    public FetchMoviesTask(Context context, int pageIndex, FetchMoviesCallback callback) {
+    public FetchMoviesTask(Context context, String sortOrder, int pageIndex, FetchMoviesCallback callback) {
         this.context = context;
+        this.sortOrder = sortOrder;
         this.pageIndex = pageIndex;
         this.callback = callback;
         this.movies = new ArrayList<>();
@@ -42,19 +45,8 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
     }
 
     private void fetchMovies() {
-        final Uri FETCH_MOVIES_URL = new Uri.Builder()
-                .scheme("http")
-                .path("api.themoviedb.org")
-                .appendPath("3")
-                .appendPath("discover")
-                .appendPath("movie")
-                .appendQueryParameter("sort_by", "popularity.desc")
-                .appendQueryParameter("page", String.valueOf(pageIndex))
-                .appendQueryParameter("api_key", BuildConfig.THE_MOVIE_DB_API_KEY)
-                .build();
-
         try {
-            HTTPResponse httpResponse = new HTTPClient().execute(context, "GET", FETCH_MOVIES_URL.toString());
+            HTTPResponse httpResponse = new HTTPClient().execute(context, "GET", mountUrl().toString());
             JSONObject responseAsJSON = httpResponse.getResponseAsJSON();
 
             JSONArray moviesJSON = responseAsJSON.getJSONArray("results");
@@ -67,6 +59,31 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
         } catch (HTTPClient.NotConnectedException | HTTPClient.InternalErrorException | JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private Uri mountUrl() {
+        final Uri.Builder FETCH_MOVIES_URL = new Uri.Builder()
+                .scheme("http")
+                .path("api.themoviedb.org")
+                .appendPath("3");
+
+        if (sortOrder.equals(context.getString(R.string.pref_order_most_popular_value))) {
+            FETCH_MOVIES_URL
+                    .appendPath("discover")
+                    .appendPath("movie")
+                    .appendQueryParameter("sort_by", "popularity.desc");
+        } else if (sortOrder.equals(context.getString(R.string.pref_order_top_rated_value))) {
+            FETCH_MOVIES_URL
+                    .appendPath("movie")
+                    .appendPath("top_rated");
+        } else {
+            throw new RuntimeException("Could not mount fetch movies URL, sort order is unknown: " + sortOrder);
+        }
+
+        FETCH_MOVIES_URL.appendQueryParameter("page", String.valueOf(pageIndex))
+                .appendQueryParameter("api_key", BuildConfig.THE_MOVIE_DB_API_KEY);
+
+        return FETCH_MOVIES_URL.build();
     }
 
     @Override

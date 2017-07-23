@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.kevincampos.popularmovies.data.Movie;
+import me.kevincampos.popularmovies.util.PreferencesUtil;
 
 public class MoviesDataManager implements DataLoader {
 
@@ -15,11 +16,14 @@ public class MoviesDataManager implements DataLoader {
     private boolean isLoading;
     private int pageIndex = INITIAL_PAGE;
 
+    private String lastOrder = "";
+
     private DataLoadedCallback onLoadedCallback;
     private List<DataLoadingCallbacks> loadingCallbacks;
 
     public interface DataLoadedCallback {
         void onDataLoaded(List<Movie> movies);
+        void onDataChange();
     }
 
     public MoviesDataManager(Context context, DataLoadedCallback onLoadedCallback) {
@@ -52,7 +56,26 @@ public class MoviesDataManager implements DataLoader {
             }
         };
 
-        new FetchMoviesTask(context, pageIndex, fetchMoviesCallback).execute();
+        String sortOrder = PreferencesUtil.getMoviesOrder(context);
+        lastOrder = sortOrder;
+
+        // TODO: Check for possible leaks
+        new FetchMoviesTask(context, sortOrder, pageIndex, fetchMoviesCallback).execute();
+    }
+
+    public void checkIfSettingsHasChanged() {
+        String orderSetting = PreferencesUtil.getMoviesOrder(context);
+        if (!lastOrder.equals(orderSetting)) {
+            lastOrder = orderSetting;
+            resetPages();
+            loadPage();
+        }
+    }
+
+    private void resetPages() {
+        pageIndex = INITIAL_PAGE;
+        isLoading = false;
+        onLoadedCallback.onDataChange();
     }
 
     @Override
