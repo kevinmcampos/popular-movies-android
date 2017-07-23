@@ -58,7 +58,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new MovieAdapter(this, moviesDataManager);
+        adapter = new MovieAdapter(this, moviesDataManager, new MovieAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(Movie movie) {
+                MovieDetailActivity.openMovieDetail(HomeActivity.this, movie);
+            }
+        });
 
         moviesGrid.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);

@@ -22,6 +22,14 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:name=".ui.MovieDetailActivity"
+            android:theme="@style/PopularMovies.Home">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.HomeActivity" />
+        </activity>
+
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/settings">

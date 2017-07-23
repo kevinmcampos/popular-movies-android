@@ -21,12 +21,21 @@ import me.kevincampos.popularmovies.data.api.MoviesDataManager;
 
 public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DataLoadingCallbacks {
 
+    public interface ItemClickListener {
+        void onItemClick(Movie movie);
+    }
+
     private Activity hostActivity;
+    private final ItemClickListener itemClickListener;
+    private final MoviesDataManager moviesDataManager;
+
     private List<Movie> movies = new ArrayList<>();
 
-    public MovieAdapter(Activity hostActivity, MoviesDataManager moviesDataManager) {
+    public MovieAdapter(Activity hostActivity, MoviesDataManager moviesDataManager, ItemClickListener itemClickListener) {
         this.hostActivity = hostActivity;
-        moviesDataManager.registerCallback(this);
+        this.itemClickListener = itemClickListener;
+        this.moviesDataManager = moviesDataManager;
+        this.moviesDataManager.registerCallback(this);
     }
 
     @Override
@@ -70,6 +79,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     class MovieHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.movie_container)
+        View container;
+
         @BindView(R.id.movie_poster)
         ImageView poster;
 
@@ -78,7 +90,13 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ButterKnife.bind(this, itemView);
         }
 
-        void bind(Movie movie) {
+        void bind(final Movie movie) {
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onItemClick(movie);
+                }
+            });
             Picasso.with(hostActivity.getBaseContext())
                     .load(movie.getPosterURL())
                     .placeholder(R.color.immersive_bars)
