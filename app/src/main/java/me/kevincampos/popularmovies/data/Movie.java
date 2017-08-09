@@ -96,6 +96,17 @@ public class Movie implements Parcelable {
                 .build();
     }
 
+    public Uri getBackdropURL() {
+        return new Uri.Builder()
+                .scheme("http")
+                .path("image.tmdb.org")
+                .appendPath("t")
+                .appendPath("p")
+                .appendPath("w780")
+                .appendPath(BACKDROP_PATH.substring(1)) // Remove backslash from path
+                .build();
+    }
+
     /**
      * Returns a brief description of this movie. The exact details of the representation are
      * unspecified and subject to change, but the following may be regarded as typical:

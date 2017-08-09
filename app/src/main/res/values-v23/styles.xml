@@ -5,4 +5,9 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="PopularMovies.MovieDetail">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
 </resources>

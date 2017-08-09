@@ -24,7 +24,7 @@
 
 
         <activity android:name=".ui.MovieDetailActivity"
-            android:theme="@style/PopularMovies.Home">
+            android:theme="@style/PopularMovies.MovieDetail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.HomeActivity" />

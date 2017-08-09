@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="movie_detail_backdrop_height">400dp</dimen>
+    <dimen name="movie_detail_margin_to_start_content">150dp</dimen>
+    <dimen name="movie_detail_header_gradient_height">150dp</dimen>
+    <dimen name="movie_detail_poster_width">100dp</dimen>
+
+</resources>
