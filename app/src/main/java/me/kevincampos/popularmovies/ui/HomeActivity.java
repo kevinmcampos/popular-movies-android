@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,18 @@ public class HomeActivity extends AppCompatActivity {
 
     @BindView(R.id.movies_grid)
     RecyclerView moviesGrid;
+
+    @BindView(R.id.loading)
+    View loading;
+
+    @BindView(R.id.no_internet_connection_container)
+    View noInternetConnection;
+
+    @BindView(R.id.error_text)
+    TextView errorTextView;
+
+    @BindView(R.id.retry_button)
+    Button retryButton;
 
     private MoviesDataManager moviesDataManager;
     private MovieAdapter adapter;
@@ -50,11 +63,20 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataLoaded(List<Movie> movies) {
                 adapter.addData(movies);
+                loading.setVisibility(View.GONE);
+                moviesGrid.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onDataChange() {
                 adapter.clear();
+                loading.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailed(String errorText) {
+                adapter.clear();
+                displayError(errorText);
             }
         });
 
@@ -76,6 +98,26 @@ public class HomeActivity extends AppCompatActivity {
         });
         moviesGrid.setHasFixedSize(true);
 
+        moviesDataManager.loadPage();
+
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retry();
+            }
+        });
+    }
+
+    private void displayError(String errorText) {
+        loading.setVisibility(View.GONE);
+        moviesGrid.setVisibility(View.GONE);
+        noInternetConnection.setVisibility(View.VISIBLE);
+        errorTextView.setText(errorText);
+    }
+
+    private void retry() {
+        loading.setVisibility(View.VISIBLE);
+        noInternetConnection.setVisibility(View.GONE);
         moviesDataManager.loadPage();
     }
 

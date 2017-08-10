@@ -18,4 +18,11 @@
     <string name="pref_order_top_rated_label">Top rated</string>
     <string name="pref_order_top_rated_value" translatable="false">top_rated</string>
 
+    <!-- Connection errors -->
+    <string name="no_internet_connection">Failed to connect with server. Check your internet connection and try again.</string>
+    <string name="internal_error">Internal error. Try it again later.</string>
+
+    <string name="no_internet_connection_content_description">A image of a sad cloud which indicates that could not fetch for movies</string>
+    <string name="retry_button">RETRY</string>
+
 </resources>

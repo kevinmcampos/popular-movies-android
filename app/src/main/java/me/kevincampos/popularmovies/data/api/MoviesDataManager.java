@@ -23,7 +23,10 @@ public class MoviesDataManager implements DataLoader {
 
     public interface DataLoadedCallback {
         void onDataLoaded(List<Movie> movies);
+
         void onDataChange();
+
+        void onFailed(String errorText);
     }
 
     public MoviesDataManager(Context context, DataLoadedCallback onLoadedCallback) {
@@ -49,10 +52,11 @@ public class MoviesDataManager implements DataLoader {
             }
 
             @Override
-            public void onFailed() {
-                // TODO: Handle errors
+            public void onFailed(String errorText) {
+                pageIndex = 1;
                 dispatchLoadingFinishedCallbacks();
                 isLoading = false;
+                onLoadedCallback.onFailed(errorText);
             }
         };
 

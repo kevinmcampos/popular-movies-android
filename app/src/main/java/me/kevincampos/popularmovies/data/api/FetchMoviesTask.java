@@ -21,7 +21,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
 
     public interface FetchMoviesCallback {
         void onSuccess(List<Movie> movies);
-        void onFailed();
+        void onFailed(String errorText);
     }
 
     private Context context;
@@ -29,6 +29,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
     private int pageIndex;
     private FetchMoviesCallback callback;
     private List<Movie> movies;
+    private String error;
 
     public FetchMoviesTask(Context context, String sortOrder, int pageIndex, FetchMoviesCallback callback) {
         this.context = context;
@@ -56,7 +57,10 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
                 movies.add(movie);
             }
 
-        } catch (HTTPClient.NotConnectedException | HTTPClient.InternalErrorException | JSONException e) {
+        } catch (HTTPClient.NotConnectedException e) {
+            error = context.getString(R.string.no_internet_connection);
+        } catch (HTTPClient.InternalErrorException | JSONException e) {
+            error = context.getString(R.string.internal_error);
             e.printStackTrace();
         }
     }
@@ -88,6 +92,10 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void o) {
-        callback.onSuccess(movies);
+        if (error == null) {
+            callback.onSuccess(movies);
+        } else {
+            callback.onFailed(error);
+        }
     }
 }
