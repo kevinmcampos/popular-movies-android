@@ -10,10 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,9 +22,11 @@ public class Movie implements Parcelable {
     private final Long ID;
     public final String TITLE;
     private final Double POPULARITY;
-    private final Double VOTE_AVERAGE;
-    private final String OVERVIEW;
-    private final Date RELEASE_DATE;
+    public final Double VOTE_AVERAGE;
+    public final String OVERVIEW;
+    private final Integer RELEASE_YEAR;
+    private final Integer RELEASE_MONTH;
+    private final Integer RELEASE_DAY;
     private final String POSTER_PATH;
     private final String BACKDROP_PATH;
     private final List<Long> GENRES;
@@ -39,14 +39,9 @@ public class Movie implements Parcelable {
         VOTE_AVERAGE = movieJSON.getDouble("vote_average");
         final String unformattedDate = movieJSON.getString("release_date");
 
-        final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-        Date releaseDate = null;
-        try {
-            releaseDate = DATE_FORMAT.parse(unformattedDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        RELEASE_DATE = releaseDate;
+        RELEASE_YEAR = Integer.valueOf(unformattedDate.substring(0, 4));
+        RELEASE_MONTH = Integer.valueOf(unformattedDate.substring(5, 7));
+        RELEASE_DAY = Integer.valueOf(unformattedDate.substring(8, 10));
 
         POSTER_PATH = movieJSON.getString("poster_path");
         BACKDROP_PATH = movieJSON.getString("backdrop_path");
@@ -67,7 +62,9 @@ public class Movie implements Parcelable {
         POPULARITY = parcel.readDouble();
         VOTE_AVERAGE = parcel.readDouble();
         OVERVIEW = parcel.readString();
-        RELEASE_DATE = new Date(parcel.readLong());
+        RELEASE_YEAR = parcel.readInt();
+        RELEASE_MONTH = parcel.readInt();
+        RELEASE_DAY = parcel.readInt();
         POSTER_PATH = parcel.readString();
         BACKDROP_PATH = parcel.readString();
         GENRES = parcel.readArrayList(null);
@@ -107,6 +104,23 @@ public class Movie implements Parcelable {
                 .build();
     }
 
+    public String getReleaseDateFormatted() {
+        final Calendar RELEASE_DATE = Calendar.getInstance();
+        RELEASE_DATE.set(RELEASE_YEAR, RELEASE_MONTH, RELEASE_DAY);
+        String monthName = String.format(Locale.US, "%tB", RELEASE_DATE);
+
+        return String.format("%s %s, %s", monthName, RELEASE_DAY, RELEASE_YEAR);
+    }
+
+    public String getGenresFormatted() {
+        final StringBuilder genresFormatted = new StringBuilder();
+        for (Long genreId : GENRES) {
+            String genreName = GenreHelper.getGenreById(genreId.intValue());
+            genresFormatted.append(genreName).append(" | ");
+        }
+        return genresFormatted.substring(0, genresFormatted.length() - 3);
+    }
+
     /**
      * Returns a brief description of this movie. The exact details of the representation are
      * unspecified and subject to change, but the following may be regarded as typical:
@@ -130,7 +144,9 @@ public class Movie implements Parcelable {
         dest.writeDouble(POPULARITY);
         dest.writeDouble(VOTE_AVERAGE);
         dest.writeString(OVERVIEW);
-        dest.writeLong(RELEASE_DATE.getTime());
+        dest.writeInt(RELEASE_YEAR);
+        dest.writeInt(RELEASE_MONTH);
+        dest.writeInt(RELEASE_DAY);
         dest.writeString(POSTER_PATH);
         dest.writeString(BACKDROP_PATH);
         dest.writeList(GENRES);

@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        tools:ignore="contentDescription" />
+        tools:ignore="contentDescription"
+        tools:src="@drawable/dummy_poster" />
 
 </LinearLayout>

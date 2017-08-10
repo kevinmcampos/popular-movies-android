@@ -3,10 +3,16 @@ package me.kevincampos.popularmovies.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
@@ -26,14 +32,26 @@ public class MovieDetailActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.title)
-    TextView title;
-
     @BindView(R.id.movie_backdrop)
     ImageView backdropImageView;
 
     @BindView(R.id.movie_poster)
     ImageView posterImageView;
+
+    @BindView(R.id.movie_title)
+    TextView title;
+
+    @BindView(R.id.movie_genres)
+    TextView genres;
+
+    @BindView(R.id.movie_release_date)
+    TextView releaseDate;
+
+    @BindView(R.id.movie_rating)
+    TextView rating;
+
+    @BindView(R.id.movie_overview)
+    TextView overview;
 
     public static void openMovieDetail(Activity activity, Movie movie) {
         Intent intent = new Intent(activity, MovieDetailActivity.class);
@@ -73,6 +91,25 @@ public class MovieDetailActivity extends AppCompatActivity {
         title.setText(itemTitle);
         title.setTextColor(Color.BLACK);
         title.setFontFeatureSettings("smcp");
+
+        genres.setText(movie.getGenresFormatted());
+
+        String releaseDateFormatted = movie.getReleaseDateFormatted();
+        releaseDate.setText(releaseDateFormatted);
+
+        CharSequence ratingFormatted = formatRating(String.valueOf(movie.VOTE_AVERAGE));
+        rating.setText(ratingFormatted);
+
+        overview.setText(movie.OVERVIEW);
+    }
+
+    public CharSequence formatRating(String rating) {
+        Spannable ratingSpan = new SpannableString(rating);
+        ratingSpan.setSpan(Typeface.BOLD, 0, rating.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ratingSpan.setSpan(new RelativeSizeSpan(1.3f), 0, rating.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ratingSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, rating.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return TextUtils.concat(ratingSpan, " / 10 (TMDB)");
     }
 
     public void fixToolbarMargin() {

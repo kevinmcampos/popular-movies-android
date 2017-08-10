@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".ui.MovieDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -40,12 +41,14 @@
                 <include layout="@layout/activity_movie_detail_header" />
 
                 <TextView
-                    android:id="@+id/lorem"
+                    android:id="@+id/movie_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="22dp"
-                    android:text="@string/lorem_ipsum"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                    android:layout_marginBottom="22dp"
+                    android:layout_marginEnd="22dp"
+                    android:layout_marginStart="22dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    tools:text="Long buried secrets finally come to light as someone has been playing a very long game indeed. Sherlock and John face their greatest ever challenge. Is the game finally over?" />
 
             </LinearLayout>
 
