@@ -12,17 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/PopularMovies">
 
-        <activity android:name=".ui.HomeActivity"
+        <activity
+            android:name=".ui.HomeActivity"
+            android:launchMode="singleTop"
             android:theme="@style/PopularMovies.Home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+®
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
 
-        <activity android:name=".ui.MovieDetailActivity"
+        <activity
+            android:name=".ui.MovieDetailActivity"
             android:theme="@style/PopularMovies.MovieDetail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
