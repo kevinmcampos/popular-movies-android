@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".ui.SettingsActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?colorPrimary"
-        android:minHeight="?actionBarSize"
-        app:navigationIcon="?homeAsUpIndicator"
-        app:title="@string/settings" />
+        tools:context=".ui.SettingsActivity">
 
-</android.support.design.widget.AppBarLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorPrimary"
+            android:minHeight="?actionBarSize"
+            app:navigationIcon="?homeAsUpIndicator"
+            app:title="@string/settings" />
+
+    </android.support.design.widget.AppBarLayout>
+
+</layout>

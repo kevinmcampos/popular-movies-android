@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+    dataBinding.enabled = true
     defaultConfig {
         applicationId "me.kevincampos.popularmovies"
         minSdkVersion 21
@@ -38,6 +39,4 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${versions.supportLibrary}"
     compile "com.android.support:design:${versions.supportLibrary}"
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.jakewharton:butterknife:8.7.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
 }

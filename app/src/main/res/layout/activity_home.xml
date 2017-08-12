@@ -1,58 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black"
-    android:orientation="vertical"
-    tools:context="me.kevincampos.popularmovies.ui.HomeActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <View
-        android:id="@+id/status_bar_padding"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
-
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:orientation="vertical"
+        tools:context="me.kevincampos.popularmovies.ui.HomeActivity">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <View
+            android:id="@+id/status_bar_padding"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize"
-            android:elevation="1dp"
-            android:title="@string/app_name" />
+            android:layout_height="wrap_content">
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:actionBarSize"
+                android:elevation="1dp"
+                android:title="@string/app_name" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        </android.support.design.widget.AppBarLayout>
 
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:indeterminateTint="?android:colorAccent"
-            android:indeterminateTintMode="src_in" />
-
-        <include layout="@layout/no_internet_connection" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/movies_grid"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:elevation="1dp"
-            android:scrollbarStyle="outsideOverlay"
-            android:scrollbars="vertical"
-            app:layoutManager="GridLayoutManager"
-            app:spanCount="2"
-            tools:listitem="@layout/list_item_movie" />
+            android:layout_height="match_parent">
 
-    </FrameLayout>
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="?android:colorAccent"
+                android:indeterminateTintMode="src_in" />
 
-</LinearLayout>
+            <include
+                android:id="@+id/no_internet_container"
+                layout="@layout/no_internet_connection" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/movies_grid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:elevation="1dp"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                app:layoutManager="GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/list_item_movie" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</layout>

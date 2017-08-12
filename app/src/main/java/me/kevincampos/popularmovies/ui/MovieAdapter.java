@@ -5,19 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.data.Movie;
 import me.kevincampos.popularmovies.data.api.DataLoadingCallbacks;
 import me.kevincampos.popularmovies.data.api.MoviesDataManager;
+import me.kevincampos.popularmovies.databinding.ListItemMovieBinding;
 
 public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DataLoadingCallbacks {
 
@@ -40,10 +38,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(hostActivity.getBaseContext())
-                .inflate(R.layout.list_item_movie, parent, false);
-
-        return new MovieHolder(itemView);
+        LayoutInflater layoutInflater = LayoutInflater.from(hostActivity.getBaseContext());
+        ListItemMovieBinding listItemMovieBinding =
+                ListItemMovieBinding.inflate(layoutInflater, parent, false);
+        return new MovieHolder(listItemMovieBinding);
     }
 
     @Override
@@ -79,19 +77,15 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     class MovieHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.movie_container)
-        View container;
+        private ListItemMovieBinding binding;
 
-        @BindView(R.id.movie_poster)
-        ImageView poster;
-
-        MovieHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        MovieHolder(ListItemMovieBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         void bind(final Movie movie) {
-            container.setOnClickListener(new View.OnClickListener() {
+            binding.movieContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     itemClickListener.onItemClick(movie);
@@ -100,8 +94,8 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Picasso.with(hostActivity.getBaseContext())
                     .load(movie.getPosterURL())
                     .placeholder(R.color.immersive_bars)
-                    .into(poster);
-            poster.setContentDescription(hostActivity.getString(R.string.movie_poster_content_description, movie.TITLE));
+                    .into(binding.moviePoster);
+            binding.moviePoster.setContentDescription(hostActivity.getString(R.string.movie_poster_content_description, movie.TITLE));
         }
     }
 }

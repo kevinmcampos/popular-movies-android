@@ -1,47 +1,28 @@
 package me.kevincampos.popularmovies.ui;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.data.Movie;
 import me.kevincampos.popularmovies.data.api.MoviesDataManager;
+import me.kevincampos.popularmovies.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.movies_grid)
-    RecyclerView moviesGrid;
-
-    @BindView(R.id.loading)
-    View loading;
-
-    @BindView(R.id.no_internet_connection_container)
-    View noInternetConnection;
-
-    @BindView(R.id.error_text)
-    TextView errorTextView;
-
-    @BindView(R.id.retry_button)
-    Button retryButton;
+    private ActivityHomeBinding binding;
 
     private MoviesDataManager moviesDataManager;
     private MovieAdapter adapter;
@@ -50,10 +31,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        ButterKnife.bind(this);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
 
-        setSupportActionBar(toolbar);
-        TextView toolbarText = (TextView) toolbar.getChildAt(0);
+        setSupportActionBar(binding.toolbar);
+        TextView toolbarText = (TextView) binding.toolbar.getChildAt(0);
         toolbarText.setTextColor(Color.BLACK);
         toolbarText.setFontFeatureSettings("smcp");
 
@@ -63,14 +44,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataLoaded(List<Movie> movies) {
                 adapter.addData(movies);
-                loading.setVisibility(View.GONE);
-                moviesGrid.setVisibility(View.VISIBLE);
+                binding.loading.setVisibility(View.GONE);
+                binding.moviesGrid.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onDataChange() {
                 adapter.clear();
-                loading.setVisibility(View.VISIBLE);
+                binding.loading.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -87,20 +68,20 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        moviesGrid.setAdapter(adapter);
+        binding.moviesGrid.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        moviesGrid.setLayoutManager(layoutManager);
-        moviesGrid.addOnScrollListener(new InfiniteScrollListener(layoutManager, moviesDataManager) {
+        binding.moviesGrid.setLayoutManager(layoutManager);
+        binding.moviesGrid.addOnScrollListener(new InfiniteScrollListener(layoutManager, moviesDataManager) {
             @Override
             public void onLoadMore() {
                 moviesDataManager.loadPage();
             }
         });
-        moviesGrid.setHasFixedSize(true);
+        binding.moviesGrid.setHasFixedSize(true);
 
         moviesDataManager.loadPage();
 
-        retryButton.setOnClickListener(new View.OnClickListener() {
+        binding.noInternetContainer.retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 retry();
@@ -109,15 +90,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void displayError(String errorText) {
-        loading.setVisibility(View.GONE);
-        moviesGrid.setVisibility(View.GONE);
-        noInternetConnection.setVisibility(View.VISIBLE);
-        errorTextView.setText(errorText);
+        binding.loading.setVisibility(View.GONE);
+        binding.moviesGrid.setVisibility(View.GONE);
+        binding.noInternetContainer.container.setVisibility(View.VISIBLE);
+        binding.noInternetContainer.errorText.setText(errorText);
     }
 
     private void retry() {
-        loading.setVisibility(View.VISIBLE);
-        noInternetConnection.setVisibility(View.GONE);
+        binding.loading.setVisibility(View.VISIBLE);
+        binding.noInternetContainer.container.setVisibility(View.GONE);
         moviesDataManager.loadPage();
     }
 
