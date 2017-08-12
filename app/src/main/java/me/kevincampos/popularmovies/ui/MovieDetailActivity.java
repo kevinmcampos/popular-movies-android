@@ -1,12 +1,16 @@
 package me.kevincampos.popularmovies.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -74,7 +78,26 @@ public class MovieDetailActivity extends AppCompatActivity {
         CharSequence ratingFormatted = formatRating(String.valueOf(movie.VOTE_AVERAGE));
         binding.header.movieRating.setText(ratingFormatted);
 
-        binding.movieOverview.setText(movie.OVERVIEW);
+        FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(getBaseContext(), getSupportFragmentManager(), movie);
+        binding.viewPager.setAdapter(pagerAdapter);
+        binding.viewPager.setOffscreenPageLimit(3);
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                binding.viewPager.reMeasureCurrentPage(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        binding.tabLayout.setupWithViewPager(binding.viewPager);
     }
 
     public CharSequence formatRating(String rating) {
@@ -93,6 +116,60 @@ public class MovieDetailActivity extends AppCompatActivity {
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.toolbar.getLayoutParams();
             params.topMargin = titleBarHeight;
         }
+    }
+
+    public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
+
+        private final static int PAGE_COUNT = 3;
+
+        private final Context context;
+        private final Movie movie;
+
+        public FragmentPagerAdapter(Context context, FragmentManager fm, Movie movie) {
+            super(fm);
+            this.context = context;
+            this.movie = movie;
+        }
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0: {
+                    return OverviewFragment.newInstance(movie);
+                }
+                case 1: {
+                    return TrailersFragment.newInstance(movie.ID);
+                }
+                case 2: {
+                    return ReviewsFragment.newInstance(movie.ID);
+                }
+                default:
+                    throw new RuntimeException("Invalid position for FragmentPagerAdapter: " + position);
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0: {
+                    return context.getString(R.string.movie_overview);
+                }
+                case 1: {
+                    return context.getString(R.string.movie_trailer);
+                }
+                case 2: {
+                    return context.getString(R.string.movie_review);
+                }
+                default:
+                    throw new RuntimeException("Invalid position for FragmentPagerAdapter: " + position);
+            }
+        }
+
     }
 
 }

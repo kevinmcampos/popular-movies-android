@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <FrameLayout
@@ -12,51 +13,69 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/movie_backdrop"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/movie_detail_backdrop_height"
-                    android:scaleType="centerCrop"
-                    tools:ignore="contentDescription"
-                    tools:src="@drawable/dummy_backdrop" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/movie_detail_backdrop_height"
-                    android:background="@drawable/backdrop_gradient_overlay" />
-
-                <LinearLayout
+                <android.support.design.widget.AppBarLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/movie_detail_margin_to_start_content"
-                    android:orientation="vertical">
+                    android:background="@color/white">
 
-                    <View
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/movie_detail_header_gradient_height"
-                        android:background="@drawable/backdrop_header_gradient_overlay" />
+                        android:layout_height="wrap_content">
 
-                    <include
-                        android:id="@+id/header"
-                        layout="@layout/activity_movie_detail_header" />
+                        <ImageView
+                            android:id="@+id/movie_backdrop"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/movie_detail_backdrop_height"
+                            android:scaleType="centerCrop"
+                            tools:ignore="contentDescription"
+                            tools:src="@drawable/dummy_backdrop" />
 
-                    <TextView
-                        android:id="@+id/movie_overview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="22dp"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginStart="22dp"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        tools:text="Long buried secrets finally come to light as someone has been playing a very long game indeed. Sherlock and John face their greatest ever challenge. Is the game finally over?" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/movie_detail_backdrop_height"
+                            android:background="@drawable/backdrop_gradient_overlay" />
 
-                </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/movie_detail_margin_to_start_content"
+                            android:orientation="vertical">
 
-            </FrameLayout>
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/movie_detail_header_gradient_height"
+                                android:background="@drawable/backdrop_header_gradient_overlay" />
+
+                            <include
+                                android:id="@+id/header"
+                                layout="@layout/activity_movie_detail_header" />
+
+                            <android.support.design.widget.TabLayout
+                                android:id="@+id/tab_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:tabIndicatorColor="@color/colorPrimary"
+                                app:tabIndicatorHeight="3dp"
+                                app:tabMode="scrollable"
+                                app:tabSelectedTextColor="@color/colorPrimaryDark" />
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </android.support.design.widget.AppBarLayout>
+
+                <me.kevincampos.popularmovies.ui.widget.WrapContentViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </ScrollView>
 

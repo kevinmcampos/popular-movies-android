@@ -5,6 +5,10 @@
     <string name="movie_poster_content_description">Poster image of the movie %1$s</string>
     <string name="movie_backdrop_content_description">Backdrop image of the movie %1$s</string>
 
+    <string name="movie_overview">Overview</string>
+    <string name="movie_trailer">Trailer</string>
+    <string name="movie_review">User Reviews</string>
+
     <!-- Preferences -->
     <string name="settings">Settings</string>
 

@@ -19,7 +19,7 @@ public class Movie implements Parcelable {
 
     private static final String TAG = "Movie";
 
-    private final Long ID;
+    public final Long ID;
     public final String TITLE;
     private final Double POPULARITY;
     public final Double VOTE_AVERAGE;
@@ -88,7 +88,7 @@ public class Movie implements Parcelable {
                 .path("image.tmdb.org")
                 .appendPath("t")
                 .appendPath("p")
-                .appendPath("w185")
+                .appendPath("w342")
                 .appendPath(POSTER_PATH.substring(1)) // Remove backslash from path
                 .build();
     }
