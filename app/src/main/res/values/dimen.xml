@@ -6,4 +6,6 @@
     <dimen name="movie_detail_header_gradient_height">150dp</dimen>
     <dimen name="movie_detail_poster_width">100dp</dimen>
 
+    <dimen name="movie_detail_title_font_size">22sp</dimen>
+
 </resources>
