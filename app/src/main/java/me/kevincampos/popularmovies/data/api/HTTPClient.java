@@ -21,6 +21,9 @@ public class HTTPClient {
 
     private static final String TAG = "HTTPClient";
 
+    private static final int CONNECT_TIMOUT = 5000;
+    private static final int READ_TIMEOUT = 10000;
+
     @CheckResult
     @NonNull
     @WorkerThread
@@ -36,6 +39,8 @@ public class HTTPClient {
             URL url = new URL(urlString);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod(method);
+            urlConnection.setConnectTimeout(CONNECT_TIMOUT);
+            urlConnection.setReadTimeout(READ_TIMEOUT);
             urlConnection.connect();
 
             int responseCode = urlConnection.getResponseCode();

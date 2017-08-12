@@ -68,7 +68,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
     private Uri mountUrl() {
         final Uri.Builder FETCH_MOVIES_URL = new Uri.Builder()
                 .scheme("http")
-                .path("api.themoviedb.org")
+                .authority("api.themoviedb.org")
                 .appendPath("3");
 
         if (sortOrder.equals(context.getString(R.string.pref_order_most_popular_value))) {
