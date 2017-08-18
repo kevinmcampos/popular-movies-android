@@ -1,6 +1,7 @@
 package me.kevincampos.popularmovies.ui;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -69,7 +70,12 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         binding.moviesGrid.setAdapter(adapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager layoutManager;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layoutManager = new GridLayoutManager(this, 2);
+        } else {
+            layoutManager = new GridLayoutManager(this, 3);
+        }
         binding.moviesGrid.setLayoutManager(layoutManager);
         binding.moviesGrid.addOnScrollListener(new InfiniteScrollListener(layoutManager, moviesDataManager) {
             @Override
@@ -129,13 +135,12 @@ public class HomeActivity extends AppCompatActivity {
 
     private void fixStatusBarPadding() {
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
+        if (resourceId > 0 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             int statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-            View separator = findViewById(R.id.status_bar_padding);
-            LinearLayout.LayoutParams separatorLayoutParams = (LinearLayout.LayoutParams) separator.getLayoutParams();
+            LinearLayout.LayoutParams separatorLayoutParams = (LinearLayout.LayoutParams) binding.statusBarPadding.getLayoutParams();
             separatorLayoutParams.height = statusBarHeight;
-            separator.setLayoutParams(separatorLayoutParams);
+            binding.statusBarPadding.setLayoutParams(separatorLayoutParams);
         }
     }
 }

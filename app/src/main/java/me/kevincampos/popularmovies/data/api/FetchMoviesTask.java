@@ -73,8 +73,8 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Void> {
 
         if (sortOrder.equals(context.getString(R.string.pref_order_most_popular_value))) {
             FETCH_MOVIES_URL
-                    .appendPath("discover")
                     .appendPath("movie")
+                    .appendPath("popular")
                     .appendQueryParameter("sort_by", "popularity.desc");
         } else if (sortOrder.equals(context.getString(R.string.pref_order_top_rated_value))) {
             FETCH_MOVIES_URL
