@@ -1,5 +1,7 @@
 package me.kevincampos.popularmovies.data;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,6 +17,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import me.kevincampos.popularmovies.data.database.MovieContract.MovieColumns;
+
 public class Movie implements Parcelable {
 
     private static final String TAG = "Movie";
@@ -29,7 +33,7 @@ public class Movie implements Parcelable {
     private final Integer RELEASE_DAY;
     private final String POSTER_PATH;
     private final String BACKDROP_PATH;
-    private final List<Long> GENRES;
+    public final String GENRES;
     private final Boolean IS_ADULT;
 
     public Movie(JSONObject movieJSON) throws JSONException {
@@ -46,11 +50,12 @@ public class Movie implements Parcelable {
         POSTER_PATH = movieJSON.getString("poster_path");
         BACKDROP_PATH = movieJSON.getString("backdrop_path");
 
-        GENRES = new ArrayList<>();
+        List<Long> genresList = new ArrayList<>();
         JSONArray genreIds = movieJSON.getJSONArray("genre_ids");
         for (int i = 0; i < genreIds.length(); i++) {
-            GENRES.add(genreIds.getLong(i));
+            genresList.add(genreIds.getLong(i));
         }
+        GENRES = formatGenres(genresList);
 
         OVERVIEW = movieJSON.getString("overview");
         IS_ADULT = movieJSON.getBoolean("adult");
@@ -67,8 +72,46 @@ public class Movie implements Parcelable {
         RELEASE_DAY = parcel.readInt();
         POSTER_PATH = parcel.readString();
         BACKDROP_PATH = parcel.readString();
-        GENRES = parcel.readArrayList(null);
+        GENRES = parcel.readString();
         IS_ADULT = parcel.readInt() == 1;
+    }
+
+    public Movie(Cursor cursor) {
+        int columnIndex = cursor.getColumnIndexOrThrow(MovieColumns._ID);
+        ID = cursor.getLong(columnIndex);
+
+        columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.TITLE);
+        TITLE = cursor.getString(columnIndex);
+
+        columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.POPULARITY);
+        POPULARITY = cursor.getDouble(columnIndex);
+
+        columnIndex = cursor.getColumnIndex(MovieColumns.VOTE_AVERAGE);
+        VOTE_AVERAGE = cursor.getDouble(columnIndex);
+
+        columnIndex = cursor.getColumnIndex(MovieColumns.OVERVIEW);
+        OVERVIEW = cursor.getString(columnIndex);
+
+        columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.RELEASE_YEAR);
+        RELEASE_YEAR = cursor.getInt(columnIndex);
+
+        columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.RELEASE_MONTH);
+        RELEASE_MONTH = cursor.getInt(columnIndex);
+
+        columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.RELEASE_DAY);
+        RELEASE_DAY = cursor.getInt(columnIndex);
+
+        columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.POSTER_PATH);
+        POSTER_PATH = cursor.getString(columnIndex);
+
+        columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.BACKDROP_PATH);
+        BACKDROP_PATH = cursor.getString(columnIndex);
+
+        columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.GENRES);
+        GENRES = cursor.getString(columnIndex);
+
+        columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.IS_ADULT);
+        IS_ADULT = cursor.getInt(columnIndex) == 1;
     }
 
     @Nullable
@@ -80,6 +123,32 @@ public class Movie implements Parcelable {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public ContentValues getContentValues() {
+        ContentValues values = new ContentValues();
+        values.put(MovieColumns.ID, ID);
+        values.put(MovieColumns.TITLE, TITLE);
+        values.put(MovieColumns.POPULARITY, POPULARITY);
+        values.put(MovieColumns.VOTE_AVERAGE, VOTE_AVERAGE);
+        values.put(MovieColumns.OVERVIEW, OVERVIEW);
+        values.put(MovieColumns.RELEASE_YEAR, RELEASE_YEAR);
+        values.put(MovieColumns.RELEASE_MONTH, RELEASE_MONTH);
+        values.put(MovieColumns.RELEASE_DAY, RELEASE_DAY);
+        values.put(MovieColumns.POSTER_PATH, POSTER_PATH);
+        values.put(MovieColumns.BACKDROP_PATH, BACKDROP_PATH);
+        values.put(MovieColumns.GENRES, GENRES);
+        values.put(MovieColumns.IS_ADULT, IS_ADULT);
+        return values;
+    }
+
+    private String formatGenres(List<Long> genresList) {
+        final StringBuilder genresFormatted = new StringBuilder();
+        for (Long genreId : genresList) {
+            String genreName = GenreHelper.getGenreById(genreId.intValue());
+            genresFormatted.append(genreName).append(" | ");
+        }
+        return genresFormatted.substring(0, genresFormatted.length() - 3);
     }
 
     public Uri getPosterURL() {
@@ -112,15 +181,6 @@ public class Movie implements Parcelable {
         return String.format("%s %s, %s", monthName, RELEASE_DAY, RELEASE_YEAR);
     }
 
-    public String getGenresFormatted() {
-        final StringBuilder genresFormatted = new StringBuilder();
-        for (Long genreId : GENRES) {
-            String genreName = GenreHelper.getGenreById(genreId.intValue());
-            genresFormatted.append(genreName).append(" | ");
-        }
-        return genresFormatted.substring(0, genresFormatted.length() - 3);
-    }
-
     /**
      * Returns a brief description of this movie. The exact details of the representation are
      * unspecified and subject to change, but the following may be regarded as typical:
@@ -149,7 +209,7 @@ public class Movie implements Parcelable {
         dest.writeInt(RELEASE_DAY);
         dest.writeString(POSTER_PATH);
         dest.writeString(BACKDROP_PATH);
-        dest.writeList(GENRES);
+        dest.writeString(GENRES);
         dest.writeInt(IS_ADULT ? 1 : 0);
     }
 

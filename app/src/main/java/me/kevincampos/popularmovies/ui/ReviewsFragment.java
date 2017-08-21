@@ -14,7 +14,7 @@ public class ReviewsFragment extends Fragment {
 
     public static final String MOVIE_ID_KEY = "MOVIE_ID_KEY";
 
-    private int movieId;
+    private long movieId;
 
     public static ReviewsFragment newInstance(Long movieId) {
         Bundle args = new Bundle();
@@ -27,7 +27,7 @@ public class ReviewsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        movieId = getArguments().getInt(MOVIE_ID_KEY);
+        movieId = getArguments().getLong(MOVIE_ID_KEY);
     }
 
     @Override

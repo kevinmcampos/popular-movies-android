@@ -1,11 +1,16 @@
 package me.kevincampos.popularmovies.ui;
 
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,18 +22,27 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.data.Movie;
+import me.kevincampos.popularmovies.data.database.MovieContract;
+import me.kevincampos.popularmovies.data.database.MovieUpdateService;
 import me.kevincampos.popularmovies.databinding.ActivityMovieDetailBinding;
 
-public class MovieDetailActivity extends AppCompatActivity {
+public class MovieDetailActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    private final int MOVIE_DETAIL_LOADER_ID = 0;
 
     private static final String MOVIE_PARCELABLE_KEY = "MOVIE_PARCELABLE_KEY";
+
+    private boolean isFavorite;
 
     private ActivityMovieDetailBinding binding;
 
@@ -50,6 +64,8 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         fixToolbarMargin();
 
+        getLoaderManager().initLoader(MOVIE_DETAIL_LOADER_ID, null, this);
+
         Movie movie = getIntent().getParcelableExtra(MOVIE_PARCELABLE_KEY);
         bindViews(movie);
     }
@@ -70,7 +86,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         binding.header.movieTitle.setTextColor(Color.BLACK);
         binding.header.movieTitle.setFontFeatureSettings("smcp");
 
-        binding.header.movieGenres.setText(movie.getGenresFormatted());
+        binding.header.movieGenres.setText(movie.GENRES);
 
         String releaseDateFormatted = movie.getReleaseDateFormatted();
         binding.header.movieReleaseDate.setText(releaseDateFormatted);
@@ -98,6 +114,31 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
         binding.tabLayout.setupWithViewPager(binding.viewPager);
+
+        binding.fabFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFavorite();
+            }
+        });
+    }
+
+    private void toggleFavorite() {
+        Movie movie = getIntent().getParcelableExtra(MOVIE_PARCELABLE_KEY);
+        final String actionFeedbackText;
+        if (isFavorite) {
+            Uri movieUri = MovieContract.buildMovieUriWithId(movie.ID);
+            MovieUpdateService.unfavoriteMovie(getBaseContext(), movieUri);
+            actionFeedbackText = "Removed from favorites.";
+            isFavorite = false;
+        } else {
+            MovieUpdateService.favoriteMovie(getBaseContext(), movie);
+            actionFeedbackText = "Marked as favorite!";
+            isFavorite = true;
+        }
+
+        Toast.makeText(MovieDetailActivity.this, actionFeedbackText, Toast.LENGTH_SHORT).show();
+        refreshMovieFavoriteStatus();
     }
 
     public CharSequence formatRating(String rating) {
@@ -118,7 +159,40 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
     }
 
-    public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
+    private void refreshMovieFavoriteStatus() {
+        int favoriteStatusResId = isFavorite ? R.drawable.ic_marked_as_favorite : R.drawable.ic_not_marked_as_favorite;
+        binding.fabFavorite.setImageDrawable(getResources().getDrawable(favoriteStatusResId, getBaseContext().getTheme()));
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (getIntent() == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Movie movie = getIntent().getParcelableExtra(MOVIE_PARCELABLE_KEY);
+        Uri movieUri = MovieContract.buildMovieUriWithId(movie.ID);
+
+        return new CursorLoader(getBaseContext(),
+                movieUri,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        isFavorite = data.moveToFirst();
+        refreshMovieFavoriteStatus();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // do nothing
+    }
+
+    private class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
         private final static int PAGE_COUNT = 3;
 

@@ -23,7 +23,6 @@
             </intent-filter>
         </activity>
 
-
         <activity
             android:name=".ui.MovieDetailActivity"
             android:theme="@style/PopularMovies.MovieDetail">
@@ -39,6 +38,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.HomeActivity" />
         </activity>
+
+        <service
+            android:name=".data.database.MovieUpdateService"
+            android:exported="false" />
+
+        <provider
+            android:name=".data.database.MovieProvider"
+            android:authorities="me.kevincampos.popularmovies"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

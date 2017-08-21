@@ -14,7 +14,7 @@ public class TrailersFragment extends Fragment {
 
     public static final String MOVIE_ID_KEY = "MOVIE_ID_KEY";
 
-    private int movieId;
+    private Long movieId;
 
     public static TrailersFragment newInstance(Long movieId) {
         Bundle args = new Bundle();
@@ -27,7 +27,7 @@ public class TrailersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        movieId = getArguments().getInt(MOVIE_ID_KEY);
+        movieId = getArguments().getLong(MOVIE_ID_KEY);
     }
 
     @Override

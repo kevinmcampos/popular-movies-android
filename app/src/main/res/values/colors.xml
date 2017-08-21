@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FFC107</color> <!-- Amber -->
     <color name="colorPrimaryDark">#FFA000</color> <!-- Amber -->
-    <color name="colorAccent">#7C4DFF</color> <!-- Deep Purple -->
+    <color name="colorAccent">@color/white</color> <!-- White -->
 
     <color name="primary_light">#FFECB3</color>
     <color name="primary_text">#212121</color>
