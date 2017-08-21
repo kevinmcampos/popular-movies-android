@@ -20,4 +20,8 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="PopularMovies.MovieDetail.FloatingActionButton">
+        <item name="colorAccent">@color/white</item>
+    </style>
+
 </resources>

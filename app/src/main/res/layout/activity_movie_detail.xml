@@ -93,6 +93,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:src="@drawable/ic_not_marked_as_favorite"
+            android:theme="@style/PopularMovies.MovieDetail.FloatingActionButton"
             android:tint="@color/colorPrimary" />
 
     </FrameLayout>
