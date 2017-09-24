@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Popular Movies</string>
 
+    <!-- Home -->
+    <string name="tab_popular_movies">Popular</string>
+    <string name="tab_top_rated_movies">Top Rated</string>
+    <string name="tab_favorite_movies">Favorite</string>
+
     <!-- Movie -->
     <string name="movie_poster_content_description">Poster image of the movie %1$s</string>
     <string name="movie_backdrop_content_description">Backdrop image of the movie %1$s</string>

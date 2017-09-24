@@ -1,32 +1,26 @@
 package me.kevincampos.popularmovies.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.List;
-
 import me.kevincampos.popularmovies.R;
-import me.kevincampos.popularmovies.data.Movie;
-import me.kevincampos.popularmovies.data.api.MoviesDataManager;
 import me.kevincampos.popularmovies.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
-
-    private MoviesDataManager moviesDataManager;
-    private MovieAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,71 +35,10 @@ public class HomeActivity extends AppCompatActivity {
 
         fixStatusBarPadding();
 
-        moviesDataManager = new MoviesDataManager(getBaseContext(), new MoviesDataManager.DataLoadedCallback() {
-            @Override
-            public void onDataLoaded(List<Movie> movies) {
-                adapter.addData(movies);
-                binding.loading.setVisibility(View.GONE);
-                binding.moviesGrid.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onDataChange() {
-                adapter.clear();
-                binding.loading.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onFailed(String errorText) {
-                adapter.clear();
-                displayError(errorText);
-            }
-        });
-
-        adapter = new MovieAdapter(this, moviesDataManager, new MovieAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(Movie movie) {
-                MovieDetailActivity.openMovieDetail(HomeActivity.this, movie);
-            }
-        });
-
-        binding.moviesGrid.setAdapter(adapter);
-        GridLayoutManager layoutManager;
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            layoutManager = new GridLayoutManager(this, 2);
-        } else {
-            layoutManager = new GridLayoutManager(this, 3);
-        }
-        binding.moviesGrid.setLayoutManager(layoutManager);
-        binding.moviesGrid.addOnScrollListener(new InfiniteScrollListener(layoutManager, moviesDataManager) {
-            @Override
-            public void onLoadMore() {
-                moviesDataManager.loadPage();
-            }
-        });
-        binding.moviesGrid.setHasFixedSize(true);
-
-        moviesDataManager.loadPage();
-
-        binding.noInternetContainer.retryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                retry();
-            }
-        });
-    }
-
-    private void displayError(String errorText) {
-        binding.loading.setVisibility(View.GONE);
-        binding.moviesGrid.setVisibility(View.GONE);
-        binding.noInternetContainer.container.setVisibility(View.VISIBLE);
-        binding.noInternetContainer.errorText.setText(errorText);
-    }
-
-    private void retry() {
-        binding.loading.setVisibility(View.VISIBLE);
-        binding.noInternetContainer.container.setVisibility(View.GONE);
-        moviesDataManager.loadPage();
+        FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(getBaseContext(), getSupportFragmentManager());
+        binding.viewPager.setAdapter(pagerAdapter);
+        binding.viewPager.setOffscreenPageLimit(3);
+        binding.tabLayout.setupWithViewPager(binding.viewPager);
     }
 
     @Override
@@ -126,13 +59,6 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        moviesDataManager.checkIfSettingsHasChanged();
-
-    }
-
     private void fixStatusBarPadding() {
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -142,5 +68,57 @@ public class HomeActivity extends AppCompatActivity {
             separatorLayoutParams.height = statusBarHeight;
             binding.statusBarPadding.setLayoutParams(separatorLayoutParams);
         }
+    }
+
+    private class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
+
+        private final static int PAGE_COUNT = 3;
+
+        private final Context context;
+
+        public FragmentPagerAdapter(Context context, FragmentManager fm) {
+            super(fm);
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0: {
+                    return new PopularMoviesFragment();
+                }
+                case 1: {
+                    return new TopRatedMoviesFragment();
+                }
+                case 2: {
+                    return new FavoriteMoviesFragment();
+                }
+                default:
+                    throw new RuntimeException("Invalid position for FragmentPagerAdapter: " + position);
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0: {
+                    return context.getString(R.string.tab_popular_movies);
+                }
+                case 1: {
+                    return context.getString(R.string.tab_top_rated_movies);
+                }
+                case 2: {
+                    return context.getString(R.string.tab_favorite_movies);
+                }
+                default:
+                    throw new RuntimeException("Invalid position for FragmentPagerAdapter: " + position);
+            }
+        }
+
     }
 }
