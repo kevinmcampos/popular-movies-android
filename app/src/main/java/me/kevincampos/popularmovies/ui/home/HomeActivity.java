@@ -1,4 +1,4 @@
-package me.kevincampos.popularmovies.ui;
+package me.kevincampos.popularmovies.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.databinding.ActivityHomeBinding;
+import me.kevincampos.popularmovies.ui.SettingsActivity;
 
 public class HomeActivity extends AppCompatActivity {
 

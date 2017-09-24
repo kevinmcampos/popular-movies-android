@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.kevincampos.popularmovies.ui;
+package me.kevincampos.popularmovies.ui.widget;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;

@@ -1,4 +1,4 @@
-package me.kevincampos.popularmovies.ui;
+package me.kevincampos.popularmovies.ui.moviedetail;
 
 import android.app.Activity;
 import android.app.LoaderManager;

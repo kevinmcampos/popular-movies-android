@@ -1,4 +1,4 @@
-package me.kevincampos.popularmovies.ui;
+package me.kevincampos.popularmovies.ui.moviedetail;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

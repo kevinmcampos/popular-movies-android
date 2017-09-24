@@ -1,4 +1,4 @@
-package me.kevincampos.popularmovies.ui;
+package me.kevincampos.popularmovies.ui.home;
 
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
@@ -16,6 +16,8 @@ import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.data.Movie;
 import me.kevincampos.popularmovies.data.api.MoviesDataManager;
 import me.kevincampos.popularmovies.databinding.FragmentMovieListBinding;
+import me.kevincampos.popularmovies.ui.moviedetail.MovieDetailActivity;
+import me.kevincampos.popularmovies.ui.widget.InfiniteScrollListener;
 
 public abstract class BaseMovieListFragment extends Fragment {
 

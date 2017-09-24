@@ -1,4 +1,4 @@
-package me.kevincampos.popularmovies.ui;
+package me.kevincampos.popularmovies.ui.home;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;

@@ -13,7 +13,7 @@
         android:theme="@style/PopularMovies">
 
         <activity
-            android:name=".ui.HomeActivity"
+            android:name=".ui.home.HomeActivity"
             android:launchMode="singleTop"
             android:theme="@style/PopularMovies.Home">
             <intent-filter>
@@ -24,11 +24,11 @@
         </activity>
 
         <activity
-            android:name=".ui.MovieDetailActivity"
+            android:name=".ui.moviedetail.MovieDetailActivity"
             android:theme="@style/PopularMovies.MovieDetail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.HomeActivity" />
+                android:value=".ui.home.HomeActivity" />
         </activity>
 
         <activity
@@ -36,7 +36,7 @@
             android:label="@string/settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.HomeActivity" />
+                android:value=".ui.home.HomeActivity" />
         </activity>
 
         <service
