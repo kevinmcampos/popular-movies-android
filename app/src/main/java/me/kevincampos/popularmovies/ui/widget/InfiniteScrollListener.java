@@ -20,8 +20,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import me.kevincampos.popularmovies.data.api.MoviesDataManager;
-
 /**
  * A scroll listener for RecyclerView to load more items as you approach the end.
  * <p>
@@ -33,27 +31,24 @@ public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListen
     private static final int VISIBLE_THRESHOLD = 7;
 
     private final LinearLayoutManager layoutManager;
-    private final MoviesDataManager dataLoading;
 
-    public InfiniteScrollListener(@NonNull LinearLayoutManager layoutManager,
-                                  @NonNull MoviesDataManager dataLoading) {
+    public InfiniteScrollListener(@NonNull LinearLayoutManager layoutManager) {
         this.layoutManager = layoutManager;
-        this.dataLoading = dataLoading;
     }
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if (dy < 0 || dataLoading.isDataLoading()) return;
+        if (dy < 0) return;
 
         final int visibleItemCount = recyclerView.getChildCount();
         final int totalItemCount = layoutManager.getItemCount();
         final int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
 
         if ((totalItemCount - visibleItemCount) <= (firstVisibleItem + VISIBLE_THRESHOLD)) {
-            onLoadMore();
+            onReachEnd();
         }
     }
 
-    public abstract void onLoadMore();
+    public abstract void onReachEnd();
 
 }

@@ -13,11 +13,9 @@ import java.util.List;
 
 import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.data.Movie;
-import me.kevincampos.popularmovies.data.api.DataLoadingCallbacks;
-import me.kevincampos.popularmovies.data.api.MoviesDataManager;
 import me.kevincampos.popularmovies.databinding.ListItemMovieBinding;
 
-public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DataLoadingCallbacks {
+public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface ItemClickListener {
         void onItemClick(Movie movie);
@@ -25,15 +23,12 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private Activity hostActivity;
     private final ItemClickListener itemClickListener;
-    private final MoviesDataManager moviesDataManager;
 
     private List<Movie> movies = new ArrayList<>();
 
-    public MovieAdapter(Activity hostActivity, MoviesDataManager moviesDataManager, ItemClickListener itemClickListener) {
+    public MovieAdapter(Activity hostActivity, ItemClickListener itemClickListener) {
         this.hostActivity = hostActivity;
         this.itemClickListener = itemClickListener;
-        this.moviesDataManager = moviesDataManager;
-        this.moviesDataManager.registerCallback(this);
     }
 
     @Override
@@ -63,16 +58,6 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void clear() {
         this.movies.clear();
         notifyDataSetChanged();
-    }
-
-    @Override
-    public void dataStartedLoading() {
-
-    }
-
-    @Override
-    public void dataFinishedLoading() {
-
     }
 
     class MovieHolder extends RecyclerView.ViewHolder {
