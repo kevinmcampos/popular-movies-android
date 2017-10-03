@@ -107,7 +107,7 @@ public class MovieProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case MOVIE_WITH_ID:
                 long id = ContentUris.parseId(uri);
-                selection = String.format("%s = ?", MovieColumns._ID);
+                selection = String.format("%s = ?", MovieColumns.ID);
                 selectionArgs = new String[]{String.valueOf(id)};
                 break;
             default:

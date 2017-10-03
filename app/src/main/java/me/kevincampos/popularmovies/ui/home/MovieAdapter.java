@@ -1,6 +1,7 @@
 package me.kevincampos.popularmovies.ui.home;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Activity hostActivity;
     private final ItemClickListener itemClickListener;
 
+    private Cursor cursor;
     private List<Movie> movies = new ArrayList<>();
 
     public MovieAdapter(Activity hostActivity, ItemClickListener itemClickListener) {
@@ -41,23 +43,26 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Movie movie = movies.get(position);
+        Movie movie = getMovieAtPosition(position);
         ((MovieHolder) holder).bind(movie);
     }
 
     @Override
     public int getItemCount() {
-        return movies == null ? 0 : movies.size();
+        if (cursor == null) {
+            return movies == null ? 0 : movies.size();
+        } else {
+            return cursor.getCount();
+        }
     }
 
-    public void addData(List<Movie> newMovies) {
-        this.movies.addAll(newMovies);
-        notifyDataSetChanged();
-    }
-
-    public void clear() {
-        this.movies.clear();
-        notifyDataSetChanged();
+    private Movie getMovieAtPosition(int position) {
+        if (cursor == null) {
+            return movies.get(position);
+        } else {
+            cursor.moveToPosition(position);
+            return new Movie(cursor);
+        }
     }
 
     class MovieHolder extends RecyclerView.ViewHolder {
@@ -83,4 +88,27 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             binding.moviePoster.setContentDescription(hostActivity.getString(R.string.movie_poster_content_description, movie.TITLE));
         }
     }
+
+    /* Array methods */
+
+    public void addData(List<Movie> newMovies) {
+        this.movies.addAll(newMovies);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        this.movies.clear();
+        notifyDataSetChanged();
+    }
+
+    /* Cursor methods */
+
+    public void swapCursor(Cursor cursor) {
+        if (this.cursor != null) {
+            this.cursor.close();
+        }
+        this.cursor = cursor;
+        notifyDataSetChanged();
+    }
+
 }

@@ -77,7 +77,7 @@ public class Movie implements Parcelable {
     }
 
     public Movie(Cursor cursor) {
-        int columnIndex = cursor.getColumnIndexOrThrow(MovieColumns._ID);
+        int columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.ID);
         ID = cursor.getLong(columnIndex);
 
         columnIndex = cursor.getColumnIndexOrThrow(MovieColumns.TITLE);

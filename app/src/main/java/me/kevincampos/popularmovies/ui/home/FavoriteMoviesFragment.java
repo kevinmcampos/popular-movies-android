@@ -1,43 +1,33 @@
 package me.kevincampos.popularmovies.ui.home;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
-import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.data.Movie;
-import me.kevincampos.popularmovies.data.api.MoviesDataManager;
+import me.kevincampos.popularmovies.data.database.MovieContract;
 import me.kevincampos.popularmovies.ui.moviedetail.MovieDetailActivity;
 
-public class FavoriteMoviesFragment extends BaseMovieListFragment {
+public class FavoriteMoviesFragment extends BaseMovieListFragment
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private MoviesDataManager moviesDataManager;
+    private final int FAVORITE_MOVIES_LOADER_ID = 1;
+
     private MovieAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setupAdapter();
+        getLoaderManager().initLoader(FAVORITE_MOVIES_LOADER_ID, null, this);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     public void setupAdapter() {
-        moviesDataManager = new MoviesDataManager(getContext(), getActivity().getString(R.string.pref_order_most_popular_value), new MoviesDataManager.DataLoadedCallback() {
-            @Override
-            public void onDataLoaded(List<Movie> movies) {
-                adapter.addData(movies);
-                displayGrid();
-            }
-
-            @Override
-            public void onFailed(String errorText) {
-                adapter.clear();
-                displayError(errorText);
-            }
-        });
-
         adapter = new MovieAdapter(getActivity(), new MovieAdapter.ItemClickListener() {
             @Override
             public void onItemClick(Movie movie) {
@@ -47,10 +37,8 @@ public class FavoriteMoviesFragment extends BaseMovieListFragment {
     }
 
     @Override
-    public void onReachEnd() {
-        if (!moviesDataManager.isDataLoading()) {
-            moviesDataManager.loadPage();
-        }
+    public void loadData() {
+        displayGrid();
     }
 
     @Override
@@ -59,7 +47,22 @@ public class FavoriteMoviesFragment extends BaseMovieListFragment {
     }
 
     @Override
-    public void loadData() {
-        moviesDataManager.loadPage();
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getContext(),
+                MovieContract.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        adapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
     }
 }
