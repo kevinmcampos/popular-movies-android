@@ -1,7 +1,6 @@
 package me.kevincampos.popularmovies.ui.home;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -9,15 +8,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import me.kevincampos.popularmovies.R;
 import me.kevincampos.popularmovies.databinding.ActivityHomeBinding;
-import me.kevincampos.popularmovies.ui.SettingsActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -40,24 +35,6 @@ public class HomeActivity extends AppCompatActivity {
         binding.viewPager.setAdapter(pagerAdapter);
         binding.viewPager.setOffscreenPageLimit(3);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.home_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings_action:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void fixStatusBarPadding() {

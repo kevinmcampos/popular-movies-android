@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 
 import me.kevincampos.popularmovies.R;
 
+@Deprecated
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
