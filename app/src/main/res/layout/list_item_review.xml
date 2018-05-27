@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/review_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            tools:text="LittleHarry21" />
+
+        <TextView
+            android:id="@+id/review_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            tools:text="I have nothing to say here. I have nothing. Nothing at all. Nada. Zip. Zilch. Zippo. Nothing smart. Nothing inspirational. Nothing even remotely researched at all. I have absolutely nothing to say whatsoever." />
+
+    </LinearLayout>
+
+</layout>

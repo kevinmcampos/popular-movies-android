@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +23,10 @@ public class TrailersFragment extends Fragment {
     public static final String MOVIE_ID_KEY = "MOVIE_ID_KEY";
 
     private Long movieId;
-    private FetchTrailersTask fetchTrailersTask;
 
-    private RecyclerView recyclerView;
+    private FetchTrailersTask fetchTrailersTask;
+    private FragmentTrailersBinding binding;
+
     private VideoAdapter adapter;
 
     public static TrailersFragment newInstance(Long movieId) {
@@ -45,7 +45,7 @@ public class TrailersFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentTrailersBinding binding = DataBindingUtil.inflate(inflater,
+        binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_trailers, container, false);
         return binding.getRoot();
     }
@@ -64,10 +64,8 @@ public class TrailersFragment extends Fragment {
             }
         });
 
-        recyclerView = view.findViewById(R.id.trailer_list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
+        binding.trailerList.setAdapter(adapter);
+        binding.trailerList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         fetchTrailersTask = new FetchTrailersTask(getActivity(), movieId, new FetchTrailersTask.FetchTrailersCallback() {
             @Override
