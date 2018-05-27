@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/movie_detail_tab_min_height"
-        android:orientation="vertical">
+        android:minHeight="@dimen/movie_detail_tab_min_height">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/review_list"
@@ -17,6 +16,19 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/list_item_review" />
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="?android:colorAccent"
+            android:indeterminateTintMode="src_in" />
+
+        <include
+            android:id="@+id/no_internet_container"
+            layout="@layout/no_internet_connection_black" />
+
+    </FrameLayout>
 
 </layout>

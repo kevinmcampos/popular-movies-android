@@ -44,7 +44,7 @@ public class TrailersFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_trailers, container, false);
         return binding.getRoot();
@@ -67,18 +67,42 @@ public class TrailersFragment extends Fragment {
         binding.trailerList.setAdapter(adapter);
         binding.trailerList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
+        binding.noInternetContainer.retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retry();
+            }
+        });
+
+        fetchTrailers();
+    }
+
+    private void fetchTrailers() {
         fetchTrailersTask = new FetchTrailersTask(getActivity(), movieId, new FetchTrailersTask.FetchTrailersCallback() {
             @Override
             public void onSuccess(List<YoutubeVideo> trailers) {
+                binding.loading.setVisibility(View.GONE);
                 adapter.swapTrailers(trailers);
             }
 
             @Override
             public void onFailed(String errorText) {
-                // TODO: Display error
+                displayError(errorText);
             }
         });
         fetchTrailersTask.execute();
+    }
+
+    protected void displayError(String errorText) {
+        binding.loading.setVisibility(View.GONE);
+        binding.noInternetContainer.container.setVisibility(View.VISIBLE);
+        binding.noInternetContainer.errorText.setText(errorText);
+    }
+
+    private void retry() {
+        binding.loading.setVisibility(View.VISIBLE);
+        binding.noInternetContainer.container.setVisibility(View.GONE);
+        fetchTrailers();
     }
 
     @Override

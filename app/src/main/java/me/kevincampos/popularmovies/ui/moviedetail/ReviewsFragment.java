@@ -43,7 +43,7 @@ public class ReviewsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_reviews, container, false);
         return binding.getRoot();
@@ -60,18 +60,44 @@ public class ReviewsFragment extends Fragment {
         binding.reviewList.setAdapter(adapter);
         binding.reviewList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
+        fetchReviews();
+
+        binding.noInternetContainer.retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retry();
+            }
+        });
+
+    }
+
+    private void fetchReviews() {
         fetchReviewsTask = new FetchReviewsTask(getActivity(), movieId, new FetchReviewsTask.FetchReviewsCallback() {
             @Override
             public void onSuccess(List<Review> reviews) {
+                binding.loading.setVisibility(View.GONE);
                 adapter.swapReviews(reviews);
             }
 
             @Override
             public void onFailed(String errorText) {
-                // TODO: Display error
+                displayError(errorText);
             }
         });
+
         fetchReviewsTask.execute();
+    }
+
+    protected void displayError(String errorText) {
+        binding.loading.setVisibility(View.GONE);
+        binding.noInternetContainer.container.setVisibility(View.VISIBLE);
+        binding.noInternetContainer.errorText.setText(errorText);
+    }
+
+    private void retry() {
+        binding.loading.setVisibility(View.VISIBLE);
+        binding.noInternetContainer.container.setVisibility(View.GONE);
+        fetchReviews();
     }
 
     @Override
