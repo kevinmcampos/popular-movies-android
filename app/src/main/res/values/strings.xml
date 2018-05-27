@@ -12,6 +12,7 @@
 
     <string name="movie_overview">Overview</string>
     <string name="movie_trailer">Trailer</string>
+    <string name="movie_trailer_thumbnail_content_description">Thumbnail image of the trailer %1$s</string>
     <string name="movie_review">User Reviews</string>
 
     <!-- Preferences -->
