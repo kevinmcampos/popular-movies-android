@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     dataBinding.enabled = true
     defaultConfig {
         applicationId "me.kevincampos.popularmovies"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,13 +24,13 @@ android {
 }
 
 static def getApiKey() {
-    def Properties props = new Properties()
+    Properties props = new Properties()
     props.load(new FileInputStream(new File('api.properties')))
     return props['THE_MOVIE_DB_API_KEY']
 }
 
 ext.versions = [
-    'supportLibrary': '26.0.2',
+    'supportLibrary': '27.1.1',
 ]
 
 dependencies {
