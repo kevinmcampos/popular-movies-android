@@ -55,7 +55,7 @@ public class Movie implements Parcelable {
         for (int i = 0; i < genreIds.length(); i++) {
             genresList.add(genreIds.getLong(i));
         }
-        GENRES = formatGenres(genresList);
+        GENRES = genresList.isEmpty() ? "" : formatGenres(genresList);
 
         OVERVIEW = movieJSON.getString("overview");
         IS_ADULT = movieJSON.getBoolean("adult");

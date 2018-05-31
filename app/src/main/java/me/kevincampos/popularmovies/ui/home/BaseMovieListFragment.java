@@ -55,7 +55,9 @@ public abstract class BaseMovieListFragment extends Fragment {
             }
         });
 
-        loadData();
+        if (savedInstanceState == null) {
+            loadData();
+        }
     }
 
     protected void onReachEnd() {

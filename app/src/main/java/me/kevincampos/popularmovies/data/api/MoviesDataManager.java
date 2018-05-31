@@ -1,12 +1,16 @@
 package me.kevincampos.popularmovies.data.api;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import java.util.List;
 
 import me.kevincampos.popularmovies.data.Movie;
 
 public class MoviesDataManager {
+
+    private static final String PAGE_INDEX_KEY = "PAGE_INDEX";
+    private static final String SORT_ORDER_KEY = "SORT_ORDER";
 
     private final int INITIAL_PAGE = 1;
 
@@ -27,6 +31,10 @@ public class MoviesDataManager {
         this.context = context;
         this.sortOrder = sortOrder;
         this.onLoadedCallback = onLoadedCallback;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
     }
 
     public void loadPage() {
@@ -56,8 +64,15 @@ public class MoviesDataManager {
         new FetchMoviesTask(context, sortOrder, pageIndex, fetchMoviesCallback).execute();
     }
 
-    public boolean isDataLoading() {
-        return isLoading;
+    public void restoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState.containsKey(PAGE_INDEX_KEY) && savedInstanceState.containsKey(SORT_ORDER_KEY)) {
+            pageIndex = savedInstanceState.getInt(PAGE_INDEX_KEY);
+            sortOrder = savedInstanceState.getString(SORT_ORDER_KEY);
+        }
     }
 
+    public void saveInstanceState(Bundle outState) {
+        outState.putInt(PAGE_INDEX_KEY, pageIndex);
+        outState.putString(SORT_ORDER_KEY, sortOrder);
+    }
 }
