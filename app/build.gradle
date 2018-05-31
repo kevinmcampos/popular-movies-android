@@ -34,9 +34,9 @@ ext.versions = [
 ]
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:${versions.supportLibrary}"
-    compile "com.android.support:recyclerview-v7:${versions.supportLibrary}"
-    compile "com.android.support:design:${versions.supportLibrary}"
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    implementation "com.android.support:recyclerview-v7:${versions.supportLibrary}"
+    implementation "com.android.support:design:${versions.supportLibrary}"
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
